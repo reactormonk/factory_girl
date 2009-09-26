@@ -20,7 +20,7 @@ describe "a factory using generate syntax" do
   end
 
   it "should raise an error when forcefully generating an invalid instance" do
-    lambda { User.generate!(:first_name => nil) }.should raise_error(ActiveRecord::RecordInvalid)
+    lambda { User.generate!(:first_name => nil) }.should raise_error(Factory::Proxy::ValidationError)
   end
 
   %w(generate generate! spawn).each do |method|

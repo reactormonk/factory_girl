@@ -11,7 +11,7 @@ describe Factory::Proxy::Create do
     stub(@instance).attribute { 'value' }
     stub(@instance, :attribute=)
     stub(@instance, :owner=)
-    stub(@instance).save!
+    stub(@instance).save { 'true' }
 
     @proxy = Factory::Proxy::Create.new(@class)
   end
@@ -48,7 +48,7 @@ describe Factory::Proxy::Create do
     end
 
     it "should save the instance" do
-      @instance.should have_received.save!
+      @instance.should have_received.save
     end
 
     it "should return the built instance" do
