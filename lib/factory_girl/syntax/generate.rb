@@ -1,7 +1,8 @@
 class Factory
   module Syntax
 
-    # Extends ActiveRecord::Base to provide generation methods for factories.
+    # Extends ActiveRecord::Base and/or DataMapper::Model to provide generation
+    # methods for factories.
     #
     # Usage:
     #
@@ -31,7 +32,7 @@ class Factory
     # This syntax was derived from Rick Bradley and Yossef Mendelssohn's
     # object_daddy.
     module Generate
-      module ActiveRecord #:nodoc:
+      module ModelInclude #:nodoc:
 
         def self.included(base) # :nodoc:
           base.extend ClassMethods
@@ -65,4 +66,8 @@ class Factory
   end
 end
 
-ActiveRecord::Base.send(:include, Factory::Syntax::Generate::ActiveRecord)
+ar_class = Module.const_get('ActiveRecord').const_get('Base') rescue nil
+ar_class.send(:include, Factory::Syntax::Generate::ModelInclude) if ar_class
+
+dm_class = Module.const_get('DataMapper').const_get('Model') rescue nil
+dm_class.send(:include, Factory::Syntax::Generate::ModelInclude) if dm_class
