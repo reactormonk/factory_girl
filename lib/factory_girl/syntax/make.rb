@@ -40,4 +40,4 @@ ar_class = Module.const_get('ActiveRecord').const_get('Base') rescue nil
 ar_class.send(:include, Factory::Syntax::Make::ModelInclude) if ar_class
 
 dm_class = Module.const_get('DataMapper').const_get('Model') rescue nil
-dm_class.send(:include, Factory::Syntax::Make::ModelInclude) if dm_class
+dm_class.send(:append_inclusions, Factory::Syntax::Make::ModelInclude) if dm_class
