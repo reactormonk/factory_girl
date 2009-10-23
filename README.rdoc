@@ -213,7 +213,8 @@ Examples:
 
 You can also define multiple types of callbacks on the same factory:
 
-  # Define a factory that calls the generate_hashed_password method after it is built, and send_welcome_email after it is saved.
+  # Define a factory that calls the generate_hashed_password method after it is built, and send_welcome_email 
+  # after it is saved.
   Factory.define :user do |u|
     u.after_build  { generate_hashed_password } 
     u.after_create { send_welcome_email } 
