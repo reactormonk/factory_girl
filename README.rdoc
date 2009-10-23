@@ -191,6 +191,51 @@ a particular factory:
     f.sequence(:email) {|n| "person#{n}@example.com" }
   end
 
+== Callbacks
+
+Factory_girl makes available three callbacks to which you can pass blocks to be executed: 
+
+* after_build  - called after a factory is built   (via Factory.build)
+* after_create - called after a factory is saved   (via Factory.create)
+* after_stub   - called after a factory is stubbed (via Factory.stub)  
+
+  # Define a factory that calls the generate_hashed_password method after it is built 
+  Factory.define :user do |u|
+    u.after_build { generate_hash_password } 
+  end
+
+  # Define a factory that calls the send_welcome_email method after it is created (saved)
+  Factory.define :user do |u|
+    u.after_create { send_welcome_email } 
+  end
+
+You can define multiple types of callbacks on the same factory:
+
+  # Define a factory that calls the generate_hashed_password method after it is built and 
+  # send_welcome_email after it is saved.
+  Factory.define :user do |u|
+    u.after_build  { generate_hash_password } 
+    u.after_create { send_welcome_email } 
+  end
+
+Factories can also define any number of the same kind of callback.  These callbacks will be excuted
+ind the order they are specified:
+
+  # Define a factory which calls send_welcome_email and then set_default_preferences after it is created
+  Factory.define :user do |u|
+    u.after_create { send_welcome_email } 
+    u.after_create { set_default_preferences } 
+  end
+
+If you provide a block parameter, the instance of that factory will be passed in:
+    
+  # Define a factory with a callback that uses an instance of that class
+  Factory.define :user_updated_yesterday, :parent => :user do |u|
+    u.after_build { |user_instance| user_instance.updated_at = Date.today - 1.day } 
+  end
+
+Note: Factory.create will invoke both after_build and after_create callbacks.  Also, just like standard attributes, child factories will inherit (and can define additional) callbacks from their parent factory.
+
 == Alternate Syntaxes
 
 Users' tastes for syntax vary dramatically, but most users are looking for a common feature set. Because of this, factory_girl supports "syntax layers" which provide alternate interfaces. See Factory::Syntax for information about the various layers available.
