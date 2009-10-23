@@ -203,25 +203,23 @@ Examples:
 
   # Define a factory that calls the generate_hashed_password method after it is built 
   Factory.define :user do |u|
-    u.after_build { generate_hash_password } 
+    u.after_build { generate_hashed_password } 
   end
 
-  # Define a factory that calls the send_welcome_email method after it is created (saved)
+  # Define a factory that calls the send_welcome_email method after it is created 
   Factory.define :user do |u|
     u.after_create { send_welcome_email } 
   end
 
-You can define multiple types of callbacks on the same factory:
+You can also define multiple types of callbacks on the same factory:
 
-  # Define a factory that calls the generate_hashed_password method after it is built and 
-  # send_welcome_email after it is saved.
+  # Define a factory that calls the generate_hashed_password method after it is built, and send_welcome_email after it is saved.
   Factory.define :user do |u|
-    u.after_build  { generate_hash_password } 
+    u.after_build  { generate_hashed_password } 
     u.after_create { send_welcome_email } 
   end
 
-Factories can also define any number of the same kind of callback.  These callbacks will be excuted
-ind the order they are specified:
+Factories can also define any number of the same kind of callback.  These callbacks will be executed in the order they are specified:
 
   # Define a factory which calls send_welcome_email and then set_default_preferences after it is created
   Factory.define :user do |u|
@@ -232,11 +230,13 @@ ind the order they are specified:
 If you provide a block parameter, the instance of that factory will be passed in:
     
   # Define a factory with a callback that uses an instance of that class
-  Factory.define :user_updated_yesterday, :parent => :user do |u|
+  Factory.define :user_updated_yesterday do |u|
     u.after_build { |user_instance| user_instance.updated_at = Date.today - 1.day } 
   end
 
-Note: Factory.create will invoke both after_build and after_create callbacks.  Also, just like standard attributes, child factories will inherit (and can define additional) callbacks from their parent factory.
+Note: Factory.create will invoke both after_build and after_create callbacks.  
+
+Also, like standard attributes, child factories will inherit (and can define additional) callbacks from their parent factory.
 
 == Alternate Syntaxes
 
