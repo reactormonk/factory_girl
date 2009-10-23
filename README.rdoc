@@ -199,6 +199,8 @@ Factory_girl makes available three callbacks to which you can pass blocks to be 
 * after_create - called after a factory is saved   (via Factory.create)
 * after_stub   - called after a factory is stubbed (via Factory.stub)  
 
+Examples:
+
   # Define a factory that calls the generate_hashed_password method after it is built 
   Factory.define :user do |u|
     u.after_build { generate_hash_password } 
