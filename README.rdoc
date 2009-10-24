@@ -8,6 +8,10 @@ This is not the official branch of DataMapper
 
 This version of factory_girl maintains compatibility with Datamapper.  By using the interface common to both ActiveRecord and DataMapper this gem can be used in both places.  This version is maintained by John F. Miller sence Sept. 25, 2009.
 
+Github: http://github.com/startrader/factory_girl/tree/master
+
+To run tests with DataMapper us `rake DATAMAPPER=true`
+
 == Download
 
 Github: http://github.com/thoughtbot/factory_girl/tree/master
