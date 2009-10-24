@@ -2,6 +2,12 @@
 
 factory_girl is a fixtures replacement with a straightforward definition syntax, support for multiple build strategies (saved instances, unsaved instances, attribute hashes, and stubbed objects), and support for multiple factories for the same class (user, admin_user, and so on), including factory inheritance.
 
+== This Version
+
+This is not the official branch of DataMapper
+
+This version of factory_girl maintains compatibility with Datamapper.  By using the interface common to both ActiveRecord and DataMapper this gem can be used in both places.  This version is maintained by John F. Miller sence Sept. 25, 2009.
+
 == Download
 
 Github: http://github.com/thoughtbot/factory_girl/tree/master

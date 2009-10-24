@@ -9,10 +9,7 @@ class Factory
           raise ValidationError, "Factory Girl could not validate created instance: #{@instance.inspect}"
         end
         run_callbacks(:after_create)
-<<<<<<< HEAD:lib/factory_girl/proxy/create.rb
         @instance
-=======
->>>>>>> origin/master:lib/factory_girl/proxy/create.rb
       end
     end
   end
