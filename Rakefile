@@ -37,13 +37,13 @@ task :sync_docs => 'rdoc' do
 end
 
 spec = Gem::Specification.new do |s|
-  s.name        = %q{factory_girl}
+  s.name        = %q{dm-factory_girl}
   s.version     = "1.2.3"
   s.summary     = %q{factory_girl provides a framework and DSL for defining and
-                     using model instance factories.}
+                     using model instance factories. This version Compatible with DataMapper.}
   s.description = %q{factory_girl provides a framework and DSL for defining and
                      using factories - less error-prone, more explicit, and
-                     all-around easier to work with than fixtures.}
+                     all-around easier to work with than fixtures. This version Compatible with DataMapper.}
 
   s.files        = FileList['[A-Z]*', 'lib/**/*.rb', 'spec/**/*.rb']
   s.require_path = 'lib'
@@ -53,8 +53,8 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.rdoc"]
   s.rdoc_options = ['--line-numbers', "--main", "README.rdoc"]
 
-  s.authors = ["Joe Ferris"]
-  s.email   = %q{jferris@thoughtbot.com}
+  s.authors = ["Joe Ferris", "John F. Miller"]
+  s.email   = %q{emperor@antarestrader.com}
   s.homepage = "http://thoughtbot.com/projects/factory_girl"
 
   s.platform = Gem::Platform::RUBY

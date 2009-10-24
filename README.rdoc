@@ -10,6 +10,9 @@ This version of factory_girl maintains compatibility with Datamapper.  By using 
 
 Github: http://github.com/startrader/factory_girl/tree/master
 
+Gem: (Gemcutter Required see: http://gemcutter.org/)
+  gem install dm-factory_girl 
+
 To run tests with DataMapper us `rake DATAMAPPER=true`
 
 == Download
