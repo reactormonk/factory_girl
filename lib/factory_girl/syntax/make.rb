@@ -1,8 +1,8 @@
 class Factory
   module Syntax
 
-    # Extends ActiveRecord::Base to provide a make class method, which is a
-    # shortcut for Factory.create.
+    # Extends ActiveRecord::Base and/or DataMapper::Model to provide a make
+    # class method, which is a shortcut for Factory.create.
     #
     # Usage:
     #
@@ -17,7 +17,7 @@ class Factory
     #
     # This syntax was derived from Pete Yandell's machinist.
     module Make
-      module ActiveRecord #:nodoc:
+      module ModelInclude #:nodoc:
 
         def self.included(base) # :nodoc:
           base.extend ClassMethods
@@ -36,4 +36,8 @@ class Factory
   end
 end
 
-ActiveRecord::Base.send(:include, Factory::Syntax::Make::ActiveRecord)
+ar_class = Module.const_get('ActiveRecord').const_get('Base') rescue nil
+ar_class.send(:include, Factory::Syntax::Make::ModelInclude) if ar_class
+
+dm_class = Module.const_get('DataMapper').const_get('Model') rescue nil
+dm_class.send(:append_inclusions, Factory::Syntax::Make::ModelInclude) if dm_class
