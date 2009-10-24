@@ -13,7 +13,11 @@ class User
   property :admin, Boolean, :default=>false
   
   has n, :posts, :child_key => [:author_id]
-
+  
+  #make test suite happy
+  def new_record?
+    new?
+  end
 end
 
 class Business 
@@ -22,6 +26,11 @@ class Business
   property :name, String,:length=>255,:nullable=>false
 
   belongs_to :owner, :model => 'User',:nullable=>false
+  
+  #make test suite happy
+  def new_record?
+    new?
+  end
 end
 
 class Post
@@ -30,6 +39,11 @@ class Post
   property :name, String,:length=>255,:nullable=>false
   
   belongs_to :author, :model => 'User', :nullable=>false 
+  
+  #make test suite happy
+  def new_record?
+    new?
+  end
 end
 
 DataMapper.auto_migrate!
