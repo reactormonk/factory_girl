@@ -94,6 +94,38 @@ describe Factory do
       end
     end
 
+    describe "adding a callback" do
+      it "should add a callback attribute when the after_build attribute is defined" do
+        mock(Factory::Attribute::Callback).new(:after_build, is_a(Proc)) { 'after_build callback' }
+        @factory.after_build {}
+        @factory.attributes.should include('after_build callback')
+      end
+
+      it "should add a callback attribute when the after_create attribute is defined" do
+        mock(Factory::Attribute::Callback).new(:after_create, is_a(Proc)) { 'after_create callback' }
+        @factory.after_create {}
+        @factory.attributes.should include('after_create callback')
+      end
+
+      it "should add a callback attribute when the after_stub attribute is defined" do
+        mock(Factory::Attribute::Callback).new(:after_stub, is_a(Proc)) { 'after_stub callback' }
+        @factory.after_stub {}
+        @factory.attributes.should include('after_stub callback')
+      end
+
+      it "should add a callback attribute when defining a callback" do
+        mock(Factory::Attribute::Callback).new(:after_create, is_a(Proc)) { 'after_create callback' }
+        @factory.callback(:after_create) {}
+        @factory.attributes.should include('after_create callback')
+      end
+
+      it "should raise an InvalidCallbackNameError when defining a callback with an invalid name" do
+        lambda{
+          @factory.callback(:invalid_callback_name) {}
+        }.should raise_error(Factory::InvalidCallbackNameError)
+      end
+    end
+
     describe "after adding an attribute" do
       before do
         @attribute = "attribute"
@@ -425,6 +457,20 @@ describe Factory do
       end
       child.attributes.size.should == 1
       child.attributes.first.should be_kind_of(Factory::Attribute::Dynamic)
+    end
+
+    it "inherit all callbacks" do
+      Factory.define(:child, :parent => :object) do |f|
+        f.after_stub {|o| o.name = 'Stubby' }
+      end
+
+      grandchild = Factory.define(:grandchild, :parent => :child) do |f|
+        f.after_stub {|o| o.name = "#{o.name} McStubby" }
+      end
+
+      grandchild.attributes.size.should == 3
+      grandchild.attributes.first.should be_kind_of(Factory::Attribute::Callback)
+      grandchild.attributes[1].should be_kind_of(Factory::Attribute::Callback)
     end
   end
 

@@ -4,6 +4,10 @@ class Factory
   class AssociationDefinitionError < RuntimeError
   end
   
+  # Raised when a callback is defined that has an invalid name
+  class InvalidCallbackNameError < RuntimeError
+  end
+  
   class << self
     attr_accessor :factories #:nodoc:
 
@@ -184,6 +188,25 @@ class Factory
     add_attribute(name) { s.next }
   end
   
+  def after_build(&block)
+    callback(:after_build, &block)
+  end
+  
+  def after_create(&block)
+    callback(:after_create, &block)
+  end
+  
+  def after_stub(&block)
+    callback(:after_stub, &block)
+  end
+  
+  def callback(name, &block)
+    unless [:after_build, :after_create, :after_stub].include?(name.to_sym)
+      raise InvalidCallbackNameError, "#{name} is not a valid callback name. Valid callback names are :after_build, :after_create, and :after_stub"
+    end
+    @attributes << Attribute::Callback.new(name.to_sym, block)
+  end
+  
   # Generates and returns a Hash of attributes from this factory. Attributes
   # can be individually overridden by passing in a Hash of attribute => value
   # pairs.
@@ -328,7 +351,7 @@ class Factory
   end
 
   def attribute_defined? (name)
-    !@attributes.detect {|attr| attr.name == name }.nil?
+    !@attributes.detect {|attr| attr.name == name && !attr.is_a?(Factory::Attribute::Callback) }.nil?
   end
 
   def assert_valid_options(options)
