@@ -4,7 +4,7 @@ factory_girl is a fixtures replacement with a straightforward definition syntax,
 
 == This Version
 
-This is not the official branch of DataMapper
+This is not the official branch of factory_girl
 
 This version of factory_girl maintains compatibility with Datamapper.  By using the interface common to both ActiveRecord and DataMapper this gem can be used in both places.  This version is maintained by John F. Miller sence Sept. 25, 2009.
 
@@ -20,7 +20,7 @@ To run tests with DataMapper us `rake DATAMAPPER=true`
 Github: http://github.com/thoughtbot/factory_girl/tree/master
 
 Gem:
-  gem install thoughtbot-factory_girl --source http://gems.github.com
+  gem install factory_girl --source http://gemcutter.org
 
 Note: if you install factory_girl using the gem from Github, you'll need this
 in your environment.rb if you want to use Rails 2.1+'s dependency manager:
@@ -55,6 +55,8 @@ Each factory has a name and a set of attributes. The name is used to guess the c
   end
 
 It is highly recommended that you have one factory for each class that provides the simplest set of attributes necessary to create an instance of that class. If you're creating ActiveRecord objects, that means that you should only provide attributes that are required through validations and that do not have defaults. Other factories can be created through inheritance to cover common scenarios for each class.
+
+Attempting to define multiple factories with the same name will raise an error.
 
 Factories can either be defined anywhere, but will automatically be loaded if they are defined in files at the following locations:
 
@@ -206,6 +208,7 @@ a particular factory:
 
 == Callbacks
 
+
 Factory_girl makes available three callbacks to which you can pass blocks to be executed: 
 
 * after_build  - called after a factory is built   (via Factory.build)
@@ -216,39 +219,26 @@ Examples:
 
   # Define a factory that calls the generate_hashed_password method after it is built 
   Factory.define :user do |u|
-    u.after_build { generate_hashed_password } 
+    u.after_build { |user| do_something_to(user) } 
   end
 
-  # Define a factory that calls the send_welcome_email method after it is created 
-  Factory.define :user do |u|
-    u.after_create { send_welcome_email } 
-  end
+Note that you'll have an instance of the user in the block.  This can be useful.
 
 You can also define multiple types of callbacks on the same factory:
 
-  # Define a factory that calls the generate_hashed_password method after it is built, and send_welcome_email 
-  # after it is saved.
   Factory.define :user do |u|
-    u.after_build  { generate_hashed_password } 
-    u.after_create { send_welcome_email } 
+    u.after_build  { |user| do_something_to(user) } 
+    u.after_create { |user| do_something_else_to(user) }
   end
 
 Factories can also define any number of the same kind of callback.  These callbacks will be executed in the order they are specified:
 
-  # Define a factory which calls send_welcome_email and then set_default_preferences after it is created
   Factory.define :user do |u|
-    u.after_create { send_welcome_email } 
-    u.after_create { set_default_preferences } 
+    u.after_create { this_runs_first } 
+    u.after_create { then_this } 
   end
 
-If you provide a block parameter, the instance of that factory will be passed in:
-    
-  # Define a factory with a callback that uses an instance of that class
-  Factory.define :user_updated_yesterday do |u|
-    u.after_build { |user_instance| user_instance.updated_at = Date.today - 1.day } 
-  end
-
-Note: Factory.create will invoke both after_build and after_create callbacks.  
+Calling Factory.create will invoke both after_build and after_create callbacks.  
 
 Also, like standard attributes, child factories will inherit (and can define additional) callbacks from their parent factory.
 
@@ -278,6 +268,7 @@ factory_girl was written by Joe Ferris with contributions from several authors, 
 * Jon Yurek
 * Josh Nichols
 * Josh Owens
+* Nate Sutton
 
 The syntax layers are derived from software written by the following authors:
 * Pete Yandell
