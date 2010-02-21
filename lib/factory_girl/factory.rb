@@ -82,11 +82,12 @@ class Factory
   
   def inherit_from(parent) #:nodoc:
     @options[:class] ||= parent.class_name
-    parent.attributes.each do |attribute|
+    parent_attributes = parent.attributes.map do |attribute|
       unless attribute_defined?(attribute.name)
-        @attributes << attribute.clone
+        attribute.clone
       end
     end
+    @attributes.unshift(*parent_attributes.compact)
   end
 
   # Adds an attribute that should be assigned on generated instances for this
